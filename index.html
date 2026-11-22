@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>German Dictation App — Deutsch Dictate | Created by Fahim Rahimi</title>
+  <style>
+    :root {
+      --primary: #1d4ed8;
+      --primary-hover: #1e40af;
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #cbd5e1;
+      --success: #15803d;
+      --danger: #b91c1c;
+      --warning: #b45309;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 16px;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 1.35rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .brand-tag {
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    .author-badge {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: #f1f5f9;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 115px;
+      padding: 12px 14px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-size: 1.06rem;
+      line-height: 1.55;
+      resize: vertical;
+      background: #fff;
+      color: var(--text);
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    select, input[type="range"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 0.92rem;
+    }
+
+    .checkbox-row {
+      margin-top: 14px;
+      padding: 10px 12px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .checkbox-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    button {
+      padding: 10px 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-success:hover { opacity: 0.92; }
+
+    .btn-warning { background: var(--warning); color: #fff; }
+    .btn-warning:hover { opacity: 0.92; }
+
+    .btn-outline {
+      background: #fff;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { background: #f1f5f9; }
+
+    .status-bar {
+      margin-top: 14px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-group {
+      display: flex;
+      gap: 6px;
+    }
+
+    .umlaut-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .umlaut-btn {
+      padding: 7px 12px;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .umlaut-btn:hover { background: #e2e8f0; }
+
+    .result-box {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 10px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      display: none;
+    }
+
+    .diff-box {
+      margin-top: 8px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid var(--border);
+      font-size: 1.05rem;
+    }
+
+    .ok {
+      color: var(--success);
+      background: #dcfce7;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-weight: 700;
+      margin-right: 3px;
+    }
+
+    .err {
+      color: var(--danger);
+      background: #fee2e2;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-weight: 700;
+      text-decoration: underline wavy;
+      margin-right: 3px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1 class="brand-title">
+      <span>German Dictation Trainer</span>
+      <span class="brand-tag">Deutsch Dictate</span>
+    </h1>
+    <div class="author-badge">Created by Fahim Rahimi</div>
+  </header>
+
+  <!-- 1. Paste German Text -->
+  <section class="card">
+    <h2>1. Paste Your German Text (Empty Box)</h2>
+    <textarea id="sourceText" placeholder="Paste your German sentences here..." oninput="loadSentences()"></textarea>
+
+    <div class="controls-grid">
+      <div class="control-group">
+        <label for="voiceSelect">German Voice:</label>
+        <select id="voiceSelect"></select>
+      </div>
+
+      <div class="control-group">
+        <label for="speedRange">Speed: <span id="speedLabel">0.55x (Very Slow)</span></label>
+        <input type="range" id="speedRange" min="0.35" max="1.0" step="0.05" value="0.55" oninput="updateSpeedLabel()">
+      </div>
+
+      <div class="control-group">
+        <label for="repeatCount">Repeats per Sentence:</label>
+        <select id="repeatCount">
+          <option value="1">1 time</option>
+          <option value="2" selected>2 times (Recommended)</option>
+          <option value="3">3 times</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="pauseSeconds">Pause Between Repeats:</label>
+        <select id="pauseSeconds">
+          <option value="3000">3 seconds</option>
+          <option value="5000" selected>5 seconds</option>
+          <option value="8000">8 seconds</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="checkbox-row">
+      <input type="checkbox" id="readPunctuation" checked>
+      <label for="readPunctuation" style="cursor:pointer; margin:0;">
+        Read punctuation aloud in German (Punkt, Komma, Fragezeichen, Ausrufezeichen)
+      </label>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" class="btn-primary" onclick="playOnce()">Play Sentence</button>
+      <button type="button" class="btn-success" onclick="playSlowRepeat()">Very Slow + Repeat</button>
+      <button type="button" class="btn-warning" onclick="playCurrentAgain()">Play Current Again</button>
+      <button type="button" class="btn-outline" onclick="stopAll()">Stop</button>
+      <button type="button" class="btn-outline" onclick="clearSource()">Clear Source</button>
+    </div>
+
+    <div class="status-bar">
+      <span id="statusLabel">No text loaded yet. Paste German sentences above.</span>
+      <div class="nav-group">
+        <button type="button" class="btn-outline" style="padding:5px 10px;" onclick="prevSentence()">Prev</button>
+        <button type="button" class="btn-outline" style="padding:5px 10px;" onclick="nextSentence()">Next</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Type What You Hear -->
+  <section class="card">
+    <h2>2. Type What You Hear</h2>
+    <textarea id="userTyping" placeholder="Type the German sentence you hear..."></textarea>
+
+    <div class="umlaut-bar">
+      <button type="button" class="umlaut-btn" onclick="insertChar('ä')">ä</button>
+      <button type="button" class="umlaut-btn" onclick="insertChar('ö')">ö</button>
+      <button type="button" class="umlaut-btn" onclick="insertChar('ü')">ü</button>
+      <button type="button" class="umlaut-btn" onclick="insertChar('ß')">ß</button>
+      <button type="button" class="umlaut-btn" onclick="insertChar('Ä')">Ä</button>
+      <button type="button" class="umlaut-btn" onclick="insertChar('Ö')">Ö</button>
+      <button type="button" class="umlaut-btn" onclick="insertChar('Ü')">Ü</button>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" class="btn-primary" onclick="checkDictation()">Check Writing</button>
+      <button type="button" class="btn-outline" onclick="showOriginalSentence()">Show / Hide Target</button>
+      <button type="button" class="btn-outline" onclick="clearTyping()">Clear Typing</button>
+    </div>
+
+    <div id="resultBox" class="result-box">
+      <div id="scoreSummary" style="font-weight:700;"></div>
+      <div id="wordComparison" class="diff-box"></div>
+      <div id="targetSentenceDisplay" class="diff-box"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+  let sentences = [];
+  let currentIdx = 0;
+  let voices = [];
+  let timerId = null;
+  let playbackToken = 0;
+
+  const punctuationNames = {
+    ".": "Punkt",
+    ",": "Komma",
+    "?": "Fragezeichen",
+    "!": "Ausrufezeichen",
+    ":": "Doppelpunkt",
+    ";": "Semikolon"
+  };
+
+  function populateVoices() {
+    const select = document.getElementById("voiceSelect");
+    const prevVal = select.value;
+
+    if (!("speechSynthesis" in window)) {
+      select.innerHTML = `<option value="__default__">Speech not supported here</option>`;
+      return;
+    }
+
+    voices = window.speechSynthesis.getVoices() || [];
+    select.innerHTML = "";
+
+    // Always include a safe default option so the dropdown is never empty
+    const defaultOpt = document.createElement("option");
+    defaultOpt.value = "__default__";
+    defaultOpt.textContent = "Default German Voice (de-DE)";
+    select.appendChild(defaultOpt);
+
+    const germanVoices = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith("de"));
+    const list = germanVoices.length > 0 ? germanVoices : voices;
+
+    list.forEach(v => {
+      const opt = document.createElement("option");
+      opt.value = v.name;
+      opt.textContent = `${v.name} (${v.lang})`;
+      select.appendChild(opt);
+    });
+
+    if (prevVal && Array.from(select.options).some(o => o.value === prevVal)) {
+      select.value = prevVal;
+    } else if (germanVoices.length > 0) {
+      select.value = germanVoices[0].name;
+    } else {
+      select.value = "__default__";
+    }
+  }
+
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.onvoiceschanged = populateVoices;
+    setTimeout(populateVoices, 200);
+    setTimeout(populateVoices, 800);
+  }
+  populateVoices();
+
+  function updateSpeedLabel() {
+    const r = parseFloat(document.getElementById("speedRange").value);
+    let label = "Normal";
+    if (r <= 0.45) label = "Ultra Slow";
+    else if (r <= 0.65) label = "Very Slow";
+    else if (r <= 0.85) label = "Slow";
+    document.getElementById("speedLabel").textContent = `${r.toFixed(2)}x (${label})`;
+  }
+
+  function splitIntoSentences(rawText) {
+    const cleaned = rawText.replace(/\r\n/g, "\n").trim();
+    if (!cleaned) return [];
+    const lines = cleaned.split("\n").map(l => l.trim()).filter(Boolean);
+    const out = [];
+    lines.forEach(line => {
+      const matches = line.match(/[^.!?]+[.!?]?/g);
+      if (matches) {
+        matches.forEach(m => {
+          const s = m.trim();
+          if (s) out.push(s);
+        });
+      }
+    });
+    return out;
+  }
+
+  function loadSentences() {
+    const raw = document.getElementById("sourceText").value;
+    sentences = splitIntoSentences(raw);
+    if (currentIdx >= sentences.length) {
+      currentIdx = 0;
+    }
+    updateStatus();
+  }
+
+  function clearSource() {
+    stopAll();
+    document.getElementById("sourceText").value = "";
+    sentences = [];
+    currentIdx = 0;
+    document.getElementById("statusLabel").textContent = "No text loaded yet. Paste German sentences above.";
+  }
+
+  function updateStatus(extra = "") {
+    if (sentences.length === 0) {
+      document.getElementById("statusLabel").textContent = "No text loaded yet. Paste German sentences above.";
+      return;
+    }
+    document.getElementById("statusLabel").textContent =
+      `Sentence ${currentIdx + 1} of ${sentences.length}${extra ? " — " + extra : ""}`;
+  }
+
+  function buildSpeechSegments(sentence) {
+    const readPunc = document.getElementById("readPunctuation").checked;
+    if (!readPunc) {
+      return [{ text: sentence, rateMultiplier: 1.0 }];
+    }
+
+    const segments = [];
+    const tokens = sentence.match(/[^,.;:!?]+|[,.;:!?]/g) || [sentence];
+
+    tokens.forEach(tok => {
+      const trimmed = tok.trim();
+      if (!trimmed) return;
+      if (punctuationNames[trimmed]) {
+        segments.push({ text: punctuationNames[trimmed], rateMultiplier: 0.95 });
+      } else {
+        segments.push({ text: trimmed, rateMultiplier: 1.0 });
+      }
+    });
+
+    return segments;
+  }
+
+  function speakSegments(segments, baseRate, token, onDone) {
+    if (token !== playbackToken) return;
+    if (!("speechSynthesis" in window)) {
+      alert("Please open this file in Safari or Chrome on your phone.");
+      return;
+    }
+    if (!segments || segments.length === 0) {
+      if (onDone) onDone();
+      return;
+    }
+
+    // Refresh voices in case mobile browser loaded them late
+    if (voices.length === 0) {
+      populateVoices();
+    }
+
+    let idx = 0;
+
+    function nextSeg() {
+      if (token !== playbackToken) return;
+      if (idx >= segments.length) {
+        if (onDone) onDone();
+        return;
+      }
+
+      const seg = segments[idx++];
+      const utter = new SpeechSynthesisUtterance(seg.text);
+      utter.lang = "de-DE";
+      utter.rate = Math.max(0.25, Math.min(1.5, baseRate * seg.rateMultiplier));
+
+      const chosenName = document.getElementById("voiceSelect").value;
+      if (chosenName && chosenName !== "__default__") {
+        const foundVoice = voices.find(v => v.name === chosenName);
+        if (foundVoice) utter.voice = foundVoice;
+      }
+
+      let settled = false;
+      const finishSeg = () => {
+        if (settled || token !== playbackToken) return;
+        settled = true;
+        timerId = setTimeout(nextSeg, 200);
+      };
+
+      utter.onend = finishSeg;
+      utter.onerror = finishSeg;
+
+      try {
+        window.speechSynthesis.speak(utter);
+      } catch (e) {
+        finishSeg();
+      }
+    }
+
+    nextSeg();
+  }
+
+  function stopAll() {
+    playbackToken++;
+    clearTimeout(timerId);
+    if ("speechSynthesis" in window) {
+      try {
+        window.speechSynthesis.cancel();
+      } catch (e) {}
+    }
+    updateStatus("Stopped");
+  }
+
+  function ensureLoaded() {
+    loadSentences();
+    if (sentences.length === 0) {
+      alert("Please paste some German text in box 1 first.");
+      return false;
+    }
+    return true;
+  }
+
+  function playOnce() {
+    if (!ensureLoaded()) return;
+    stopAll();
+    const token = playbackToken;
+    const rate = parseFloat(document.getElementById("speedRange").value);
+    const segs = buildSpeechSegments(sentences[currentIdx]);
+
+    updateStatus("Playing once...");
+    speakSegments(segs, rate, token, () => {
+      if (token === playbackToken) updateStatus("Finished");
+    });
+  }
+
+  function playSlowRepeat() {
+    if (!ensureLoaded()) return;
+    stopAll();
+    const token = playbackToken;
+    const sliderVal = parseFloat(document.getElementById("speedRange").value);
+    const verySlowRate = Math.min(sliderVal, 0.55);
+    const repeats = parseInt(document.getElementById("repeatCount").value, 10);
+    const pauseMs = parseInt(document.getElementById("pauseSeconds").value, 10);
+    const segs = buildSpeechSegments(sentences[currentIdx]);
+
+    let count = 0;
+
+    function runRepeat() {
+      if (token !== playbackToken) return;
+      count++;
+      updateStatus(`Very slow reading (${count} of ${repeats})...`);
+      speakSegments(segs, verySlowRate, token, () => {
+        if (token !== playbackToken) return;
+        if (count < repeats) {
+          updateStatus(`Pausing ${pauseMs / 1000}s before repeat...`);
+          timerId = setTimeout(runRepeat, pauseMs);
+        } else {
+          updateStatus("Repeat finished");
+        }
+      });
+    }
+
+    runRepeat();
+  }
+
+  function playCurrentAgain() {
+    playSlowRepeat();
+  }
+
+  function prevSentence() {
+    if (!ensureLoaded()) return;
+    if (currentIdx > 0) {
+      currentIdx--;
+      clearTyping();
+      updateStatus();
+      playSlowRepeat();
+    } else {
+      playSlowRepeat();
+    }
+  }
+
+  function nextSentence() {
+    if (!ensureLoaded()) return;
+    if (currentIdx < sentences.length - 1) {
+      currentIdx++;
+      clearTyping();
+      updateStatus();
+      playSlowRepeat();
+    }
+  }
+
+  function insertChar(ch) {
+    const el = document.getElementById("userTyping");
+    const start = el.selectionStart || 0;
+    const end = el.selectionEnd || 0;
+    const val = el.value;
+    el.value = val.slice(0, start) + ch + val.slice(end);
+    el.focus();
+    el.selectionStart = el.selectionEnd = start + ch.length;
+  }
+
+  function clearTyping() {
+    document.getElementById("userTyping").value = "";
+    document.getElementById("resultBox").style.display = "none";
+  }
+
+  function showOriginalSentence() {
+    if (!ensureLoaded()) return;
+    const box = document.getElementById("resultBox");
+    const targetText = sentences[currentIdx];
+    const displayEl = document.getElementById("targetSentenceDisplay");
+    if (box.style.display === "block" && displayEl.textContent === "Target: " + targetText) {
+      box.style.display = "none";
+    } else {
+      box.style.display = "block";
+      document.getElementById("scoreSummary").textContent = "Target Sentence:";
+      document.getElementById("wordComparison").innerHTML = "—";
+      displayEl.textContent = "Target: " + targetText;
+    }
+  }
+
+  function checkDictation() {
+    if (!ensureLoaded()) return;
+    const target = sentences[currentIdx].trim();
+    const typed = document.getElementById("userTyping").value.trim();
+    if (!typed) {
+      alert("Please type what you heard first.");
+      return;
+    }
+
+    const stripPunc = s => s.replace(/[.,!?;:"]/g, "").trim();
+    const targetWords = stripPunc(target).split(/\s+/).filter(Boolean);
+    const typedWords = stripPunc(typed).split(/\s+/).filter(Boolean);
+
+    let okCount = 0;
+    let html = "";
+
+    targetWords.forEach((tw, i) => {
+      const uw = typedWords[i] || "";
+      if (uw === tw) {
+        okCount++;
+        html += `<span class="ok">${uw}</span>`;
+      } else {
+        html += `<span class="err" title="Expected: ${tw}">${uw || "[missing]"}</span>`;
+      }
+    });
+
+    for (let j = targetWords.length; j < typedWords.length; j++) {
+      html += `<span class="err">${typedWords[j]}</span>`;
+    }
+
+    const pct = targetWords.length > 0 ? Math.round((okCount / targetWords.length) * 100) : 0;
+    document.getElementById("resultBox").style.display = "block";
+    document.getElementById("scoreSummary").textContent =
+      `Score: ${okCount} / ${targetWords.length} exact words (${pct}%)`;
+    document.getElementById("wordComparison").innerHTML = html;
+    document.getElementById("targetSentenceDisplay").textContent = "Target: " + target;
+  }
+</script>
+</body>
+</html>
